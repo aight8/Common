@@ -4,22 +4,26 @@
 import PackageDescription
 
 let package = Package(
-    name: "Common.swiftpm",
-    platforms: [.macOS(.v10_15), .iOS(.v13), .tvOS(.v13), .watchOS(.v6), .macCatalyst(.v13)],
+    name: "Common",
+	platforms: [.macOS(.v15), .iOS(.v18)],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
-            name: "Common.swiftpm",
-            targets: ["Common.swiftpm"]),
+            name: "Common",
+            targets: ["Common"]
+		),
     ],
+	dependencies: [
+		// Here we define our package's external dependencies
+		// and from where they can be fetched:
+		.package(url: "https://github.com/buh/CompactSlider.git", from: "1.1.6")
+	],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
         // Targets can depend on other targets in this package and products from dependencies.
-        .target(
-            name: "Common.swiftpm"),
-        .testTarget(
-            name: "Common.swiftpmTests",
-            dependencies: ["Common.swiftpm"]
-        ),
+		.target(
+			name: "Common",
+			dependencies: ["CompactSlider"]
+		),
     ]
 )
