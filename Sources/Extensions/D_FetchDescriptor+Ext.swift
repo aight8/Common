@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-extension FetchDescriptor where T: PersistentModel {
+public extension FetchDescriptor where T: PersistentModel {
 	public init(
 		predicate: Predicate<T>? = nil,
 		sortBy: [SortDescriptor<T>] = [],

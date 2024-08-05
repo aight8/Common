@@ -1,8 +1,9 @@
 import SwiftUI
 import PDFKit
 
+#if os(iOS)
 public struct PDFThumbnail: UIViewRepresentable {
-	public let data: Data
+	let data: Data
 
 	public func makeUIView(context: UIViewRepresentableContext<Self>) -> PDFThumbnailView {
 		let pdfView = PDFView()
@@ -18,3 +19,4 @@ public struct PDFThumbnail: UIViewRepresentable {
 //		uiView. = PDFDocument(data: data)
 	}
 }
+#endif

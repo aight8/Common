@@ -1,5 +1,5 @@
 import SwiftUI
 
-extension Image {
+public extension Image {
 
 }

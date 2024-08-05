@@ -1,7 +1,7 @@
 import SwiftUI
 import SwiftData
 
-struct SectionedQueryView<Content: View, Model: PersistentModel, Key: Hashable>: View {
+public struct SectionedQueryView<Content: View, Model: PersistentModel, Key: Hashable>: View {
 	@Query private var query: [Model]
 	private var content: ([QueryViewDataSection<Key, Model>]) -> Content
 	private var keyExtractor: ((Model) -> Key)
@@ -17,7 +17,7 @@ struct SectionedQueryView<Content: View, Model: PersistentModel, Key: Hashable>:
 		self.keyExtractor = keyExtractor
 	}
 
-	var body: some View {
+	public var body: some View {
 		let data = Dictionary(grouping: query, by: keyExtractor)
 		let result = keys.reduce([QueryViewDataSection]()) { partialResult, key in
 			partialResult + [.init(key: key, models: data[key] ?? [])]

@@ -1,6 +1,6 @@
 import HealthKit
 
-extension HKBiologicalSex {
+public extension HKBiologicalSex {
 	public var stringRepresentation: String {
 		switch self {
 			case .notSet: return "NotSet"

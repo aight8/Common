@@ -4,6 +4,12 @@
 
 import SwiftUI
 
+public extension View {
+	@ViewBuilder func showSizes(_ proposals: [MeasureLayout.SizeRequest] = [.minimum, .ideal, .maximum, .current]) -> some View {
+		Measure(proposals: proposals) { self }
+	}
+}
+
 struct MeasureExample: View {
 	var body: some View {
 
@@ -39,12 +45,6 @@ struct MeasureExample: View {
 	}
 }
 
-extension View {
-	@ViewBuilder func showSizes(_ proposals: [MeasureLayout.SizeRequest] = [.minimum, .ideal, .maximum, .current]) -> some View {
-		Measure(proposals: proposals) { self }
-	}
-}
-
 struct Measure<V: View>: View {
 	@State private var reportedSizes: [CGSize] = []
 
@@ -76,12 +76,12 @@ struct Measure<V: View>: View {
 	}
 }
 
-struct MeasureLayout: Layout {
-	func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
+public struct MeasureLayout: Layout {
+	public func sizeThatFits(proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) -> CGSize {
 		return subviews[0].sizeThatFits(proposal)
 	}
 
-	func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
+	public func placeSubviews(in bounds: CGRect, proposal: ProposedViewSize, subviews: Subviews, cache: inout ()) {
 		DispatchQueue.main.async {
 			subviews[0][InfoReply.self]?.wrappedValue = subviews[0][InfoRequest.self].map {
 				$0.size(view: subviews[0], proposal: proposal)
@@ -99,7 +99,7 @@ struct MeasureLayout: Layout {
 		static var defaultValue: Binding<[CGSize]>? = nil
 	}
 
-	enum SizeRequest {
+	public enum SizeRequest {
 		case minimum
 		case ideal
 		case maximum
