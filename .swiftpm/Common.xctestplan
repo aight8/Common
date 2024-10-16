@@ -1,0 +1,31 @@
+{
+  "configurations" : [
+    {
+      "id" : "DA48000B-AA30-44EC-B342-103549193543",
+      "name" : "Test Scheme Action",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+
+  },
+  "testTargets" : [
+    {
+      "skippedTests" : {
+        "suites" : [
+          {
+            "name" : "DateTests"
+          }
+        ]
+      },
+      "target" : {
+        "containerPath" : "container:",
+        "identifier" : "CommonTests",
+        "name" : "CommonTests"
+      }
+    }
+  ],
+  "version" : 2
+}

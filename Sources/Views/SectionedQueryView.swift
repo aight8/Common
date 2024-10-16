@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 
+/// [Common]
 public struct SectionedQueryView<Content: View, Model: PersistentModel, Key: Hashable>: View {
 	@Query private var query: [Model]
 	private var content: ([QueryViewDataSection<Key, Model>]) -> Content
@@ -39,9 +40,9 @@ public struct SectionedQueryView<Content: View, Model: PersistentModel, Key: Has
 
 		return result
 	}
-
 }
 
+/// [Common]
 struct QueryViewDataSection<Key: Hashable, Model: PersistentModel>: Identifiable {
 	let key: Key
 	let models: [Model]

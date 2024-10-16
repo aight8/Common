@@ -1,4 +1,0 @@
-import SwiftUI
-
-extension Color {
-}

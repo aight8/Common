@@ -1,29 +1,56 @@
 // swift-tools-version: 6.0
-// The swift-tools-version declares the minimum version of Swift required to build this package.
 
 import PackageDescription
 
 let package = Package(
     name: "Common",
-	platforms: [.macOS(.v15), .iOS(.v18)],
+	platforms: [
+        .macOS(.v15),
+        .iOS(.v18)
+    ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "Common",
-            targets: ["Common"]
+            targets: ["Common"],
 		),
+//        .executable(
+//            name: "Benchmarks",
+//            targets: ["Benchmarks"],
+//        ),
     ],
 	dependencies: [
-		// Here we define our package's external dependencies
-		// and from where they can be fetched:
-		.package(url: "https://github.com/buh/CompactSlider.git", from: "1.1.6")
+        .package(url: "https://github.com/buh/CompactSlider.git", from: "1.1.6"),
+        .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.0"),
+		.package(url: "https://github.com/ordo-one/package-benchmark", from: "1.25.0"),
+//        .package(url: "https://github.com/google/swift-benchmark", from: "0.1.2"),
 	],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
 		.target(
 			name: "Common",
-			dependencies: ["CompactSlider"]
+			dependencies: [
+                "CompactSlider",
+                .product(name: "Algorithms", package: "swift-algorithms")
+            ],
+            path: "Sources"
 		),
+        .testTarget(
+            name: "CommonTests",
+            dependencies: [
+                "Common",
+                .product(name: "Benchmark", package: "package-benchmark")
+            ],
+            path: "CommonTests"
+        ),
+//        .target(
+//            name: "Benchmarks",
+//            dependencies: [
+//                "Common",
+//                .product(name: "Benchmark", package: "swift-benchmark")
+//            ],
+//            path: "Benchmarks"
+//        ),
     ]
+//    swiftLanguageModes: [
+//        .v6
+//    ]
 )

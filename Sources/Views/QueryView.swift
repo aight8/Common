@@ -1,6 +1,7 @@
 import SwiftUI
 import SwiftData
 
+/// [Common]
 public struct QueryView<Model: PersistentModel, Content: View>: View {
 	@Query private var query: [Model]
 	private var content: ([Model]) -> (Content)

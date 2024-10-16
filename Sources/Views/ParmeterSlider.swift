@@ -2,6 +2,7 @@ import SwiftUI
 import CompactSlider
 import Swift
 
+/// [Common]
 public struct Parameter: View {
 	var name: String
 	var min: Double
@@ -45,7 +46,7 @@ public struct Parameter: View {
 			CompactSlider(
 				value: $value,
 				in: min...max,
-				step: step.doubleValue,
+				step: step.double,
 				scaleVisibility: .always,
 				minHeight: 60,
 				enableDragGestureDelayForiOS: false
@@ -161,6 +162,7 @@ public struct Parameter: View {
 //	}
 //}
 
+/// [Common]
 public struct ParameterSlider: View {
 	var name: String
 	@Binding var value: Double

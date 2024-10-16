@@ -1,5 +1,6 @@
 import SwiftUI
 
+/// [Common]
 public struct ErrorView: View {
 	let error: Error
 	let retryAction: () -> Void
