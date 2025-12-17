@@ -1,6 +1,7 @@
 import Foundation
 
 public extension Array where Element: Comparable {
+    
     /// [Common] Convenience method
 //    mutating func sortToMax() {
 //        //        sort { $0 < $1 }

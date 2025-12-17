@@ -12,3 +12,12 @@ public extension ForEach where Data.Element: Hashable, ID == Data.Element, Conte
 //        self.init(values.enumerated(), id: \.offset, content: content)
 //    }
 //}
+
+// extension ForEach where Data: RandomAccessCollection, ID == Data.Element.ID, Content: View {
+//     init?(_ optionalData: Data?, @ViewBuilder content: @escaping (Data.Element) -> Content) {
+//         guard let data = optionalData else {
+//             return nil
+//         }
+//         self.init(data, id: \.id, content: content)
+//     }
+// }

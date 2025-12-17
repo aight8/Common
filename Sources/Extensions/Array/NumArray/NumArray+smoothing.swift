@@ -2,6 +2,7 @@ import Accelerate
 import Algorithms
 
 public extension Array where Element == Double {
+    
     /// [Common] **[vDSP]** Returns the 1D convolution of a vector.
     /// - Bug: https://stackoverflow.com/questions/78754704/dimension-seems-to-be-off-for-vdsp-convolve
     func convolveAccel(with kernel: [Double]) -> [Double] {
@@ -24,6 +25,7 @@ public extension Array where Element == Double {
 }
 
 public extension Array where Element: BinaryFloatingPoint {
+    
     /// [Common] **[vDSP]** Returns the 1D convolution of a vector.
     func convolve(windowSize: Int, fn: @escaping (_ window: ArraySlice<Element>) -> Element) -> [Element] {
         return windows(ofCount: windowSize).map { window in

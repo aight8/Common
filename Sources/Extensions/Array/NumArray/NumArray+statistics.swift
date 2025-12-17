@@ -1,6 +1,7 @@
 import Accelerate
 
 public extension Array where Element: BinaryFloatingPoint {
+    
     func median() -> Double? {
         if self.isEmpty {
             return nil
@@ -18,7 +19,7 @@ public extension Array where Element == Double {
     ///
     /// # Arithmetic
     ///
-    
+
     /// [Common] **[vDSP]**
     /// Returns vector sum.
     func sum() -> Double {

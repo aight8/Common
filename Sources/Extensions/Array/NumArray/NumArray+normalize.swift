@@ -106,7 +106,7 @@ public extension Array where Element == Double {
      # Input & Output
      - Centers around 0 which is the mean, scales by std deviation
      */
-//    func normalizedZScoreAccel() -> [Double] {
-//        vDSP.normalize(self)
-//    }
+    func normalizedZScoreAccel() -> [Double] {
+        vDSP.normalize(self)
+    }
 }

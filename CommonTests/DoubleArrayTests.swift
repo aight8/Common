@@ -1,8 +1,6 @@
 import Foundation
 import Common
 import Testing
-import Benchmark
-import Histogram
 import Accelerate
 
 let A_EMPTY: [Double] = []
@@ -18,10 +16,10 @@ struct DoubleArrayTests {
     ///
 
     @Test func paddedValue() {
-        #expect(A_EMPTY.paddedValue(count: 1) == [])
-        #expect(A_1.paddedValue(count: 1) == [1, 1, 1])
-        #expect(A_1_2.paddedValue(count: 1) == [1, 1, 2, 2])
-        #expect(A_1_2_3.paddedValue(count: 1) == [1, 1, 2, 3, 3])
+        #expect(A_EMPTY.padded(count: 1) == [])
+        #expect(A_1.padded(count: 1) == [1, 1, 1])
+        #expect(A_1_2.padded(count: 1) == [1, 1, 2, 2])
+        #expect(A_1_2_3.padded(count: 1) == [1, 1, 2, 3, 3])
     }
 
     ///

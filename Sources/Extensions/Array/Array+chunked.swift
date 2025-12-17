@@ -1,3 +1,4 @@
+import Algorithms
 
 public extension Array where Element: Equatable {
     
@@ -30,5 +31,33 @@ public extension Array where Element: Equatable {
             }
         }
         return groups
+    }
+}
+
+public extension Collection {
+    
+    @inlinable
+    func chunked(
+        by belongInSameGroup: (Element, Element, SubSequence) throws -> Bool
+    ) rethrows -> [SubSequence] {
+        guard !isEmpty else { return [] }
+        var result: [SubSequence] = []
+        
+        var start = startIndex
+        var current = self[start]
+        
+        for (index, element) in indexed().dropFirst() {
+            if try !belongInSameGroup(current, element, self[start..<index]) {
+                result.append(self[start..<index])
+                start = index
+            }
+            current = element
+        }
+        
+        if start != endIndex {
+            result.append(self[start...])
+        }
+        
+        return result
     }
 }

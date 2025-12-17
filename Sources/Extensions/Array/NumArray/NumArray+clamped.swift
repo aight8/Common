@@ -2,7 +2,7 @@ import Accelerate
 
 public extension Array where Element == Double {
     /// [Common] **[vDSP]** Returns the elements of `vector` clipped to the specified range.
-    func clamp(to: ClosedRange<Double>) -> [Double] {
+    func clamped(to: ClosedRange<Double>) -> [Double] {
         vDSP.clip(self, to: to)
     }
 

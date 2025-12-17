@@ -11,3 +11,9 @@ public extension Date {
         formatted(date: date, time: .omitted)
     }
 }
+
+//extension Date: CustomStringConvertible {
+//    public var description: String {
+//        self.formatted()
+//    }
+//}

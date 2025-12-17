@@ -15,12 +15,12 @@ public extension Array where Element == Double {
     func minimum(_ vectorB: [Double]) -> [Double] {
         vDSP.minimum(self, vectorB)
     }
-    
+
     /// [Common] **[vDSP]** Returns the minimum value and corresponding index in a vector.
     func indexOfMinimum() -> (UInt, Double) {
         vDSP.indexOfMinimum(self)
     }
-    
+
     ///
     /// # Maximum
     ///
@@ -30,7 +30,7 @@ public extension Array where Element == Double {
     func maximum() -> Double {
         vDSP.maximum(self)
     }
-    
+
     /// [Common] **[vDSP]** Returns a array containing the maximum of the corresponding values of two vectors.
     func maximum(_ vectorB: [Double]) -> [Double] {
         vDSP.maximum(self, vectorB)

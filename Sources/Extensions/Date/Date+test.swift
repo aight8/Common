@@ -1,6 +1,11 @@
 import Foundation
 
 public extension Date {
+    /// [Common] Determines if the date has all of the specified date components.
+    func match(components: DateComponents) -> Bool {
+        Calendar.current.date(self, matchesComponents: components)
+    }
+
     /// [Common]
     var isStartOfDay: Bool {
         self == Calendar.current.startOfDay(for: self)
@@ -10,17 +15,17 @@ public extension Date {
     var isYesterday: Bool {
         Calendar.current.isDateInYesterday(self)
     }
-    
+
     /// [Common]
     var isToday: Bool {
         Calendar.current.isDateInToday(self)
     }
-    
+
     /// [Common]
     var isTomorrow: Bool {
         Calendar.current.isDateInTomorrow(self)
     }
-    
+
     /// [Common]
     func isSame(_ toGranularity: Calendar.Component, as date2: Date) -> Bool {
         Calendar.current.isDate(self, equalTo: date2, toGranularity: .day)
@@ -30,7 +35,7 @@ public extension Date {
     func isSameDayAs(_ date2: Date) -> Bool {
         Calendar.current.isDate(self, inSameDayAs: date2)
     }
-    
+
     ///
     /// Distance to
     ///

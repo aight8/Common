@@ -20,4 +20,13 @@ public extension String.StringInterpolation {
     mutating func appendInterpolation(_ request: URLRequest) {
         appendInterpolation("\(request.url) | \(request.httpMethod) | Headers: \(request.allHTTPHeaderFields)")
     }
+    
+    mutating func appendInterpolation(_ date: Date) {
+        appendInterpolation("\(date.formatted())")
+    }
+
+    mutating func appendInterpolation(if condition: @autoclosure () -> Bool, _ literal: StringLiteralType) {
+        guard condition() else { return }
+        appendLiteral(literal)
+    }
 }

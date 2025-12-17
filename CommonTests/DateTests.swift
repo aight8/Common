@@ -2,9 +2,9 @@ import Foundation
 import Common
 import Testing
 
-let D_31_dec_23__24_59_59 = Date(31,12,2023,23,59,59)
-let D_1_jan_24__0_0_0 = Date(1,1,2024)
-let D_jan_1_24__0_0_1 = Date(1,1,2024,0,0,1)
+let D_31_dec_23__24_59_59 = Date(year: 2023, month: 12, day: 31, hour: 23, minute: 59, second: 59)
+let D_1_jan_24__0_0_0 = Date(year: 2024, month: 1)
+let D_jan_1_24__0_0_1 = Date(year: 2024, month: 1, second: 1)
 
 struct DateTests {
     @Test func distance() {

@@ -1,6 +1,10 @@
 import Foundation
 
 public extension Date {
+//    func dateInterval(of: Calendar.Component, in: Calendar.Component) -> Range<Int> {
+//        Calendar.current.dateInterval(of: <#T##Calendar.Component#>, start: &<#T##Date#>, interval: &<#T##TimeInterval#>, for: <#T##Date#>)
+//    }
+
 //    func range(of: Calendar.Component, in: Calendar.Component) -> Range<Int> {
 //        Calendar.current.range(of: of, in: in, for: self)
 //    }

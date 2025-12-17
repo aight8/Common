@@ -7,7 +7,12 @@ public extension Duration {
     }
     
     /// [Common]
-    static func minutes(_ minutes: Int) -> Self { .seconds(minutes * 60) }
+    static func minutes(_ minutes: Int) -> Self {
+        .seconds(minutes * 60)
+    }
+
     /// [Common]
-    static func hours(_ hours: Int) -> Self { .seconds(hours * 3600) }
+    static func hours(_ hours: Int) -> Self {
+        .seconds(hours * 3600)
+    }
 }

@@ -5,69 +5,131 @@ import SwiftUI
 import Charts
 import TabularData
 
-//public struct IrregularSamples {
-//    var samples: [Sample]
-//}
+/**
+ IrregularSamples are samples which are recorded in uneven time intervals.
+ */
+public struct IrregularSamples {
+   let samples: [Sample]
+}
 
-//public struct RegularSamples {
-//    var startAt: Date
-//    var interval: TimeInterval
-//    var samples: [Double]
-//}
-//
-//public struct RegularSamples {
-//    var startAt: Date
-//    var interval: TimeInterval
-//    var samples: [Double]
-//    
-//    //    public generate()
-//}
+/**
+ RegularSamples are samples with even distances between the values.
+ * **Resampling** irregular Samples results in regular samples.
+ */
+// public struct RegularSamples {
+//     let startAt: Date
+//     let interval: TimeInterval
+//     let values: [Double]
+// 
+//     init(startAt: Date, interval: TimeInterval, values: [Double]) {
+//         self.startAt = startAt
+//         self.interval = interval
+//         self.values = values
+//     }
+// 
+//     init(samples: Samples) {
+//         let distances = samples.xDates.distancesRelativeToPrevious()
+//         let referenceDistance = distances[0]
+//         let ok = distances.allSatisfy({ $0 == referenceDistance })
+//         precondition(ok, "RegularSamples: input samples must have same distance between samples")
+// 
+//         self.startAt = samples[0].datetime
+//         self.interval = referenceDistance
+//         self.values = samples.y
+//     }
+// 
+//     subscript (index: Int) -> Sample {
+//         Sample(
+//             startAt.addingTimeInterval(interval.double * index.double),
+//             values[index]
+//         )
+//     }
+// }
 
-// TODO: rename -> AXSamplesFactory (AX is package prefix)
+/**
+ Provide a source array which contains objects with irregular samples with multiple sample values attached to it.
+ Define the target resample count and a smoothing method to apply it to the created Samples.
+
+ - Parameter <#parameter#>: <#description#>
+ - Returns: <#return value#>
+
+ - Note: <#note#>
+ */
 public struct SamplesFactory<SourceObject: Datable> {
     let source: [SourceObject]
-    let yvals: [Date]
-    
-    public init(source: [SourceObject]) {
+    let dates: [Date]
+    let resampleCount: Int
+    let smoothingMethod: SmoothingMethod
+
+    public init(
+        source: [SourceObject],
+        resampleCount: Int,
+        smoothingMethod: SmoothingMethod
+    ) {
         self.source = source
-        self.yvals = source.map(\.datetime)
+        self.dates = source.map(\.datetime)
+        self.resampleCount = resampleCount
+        self.smoothingMethod = smoothingMethod
     }
 
-    public func samples(by: (_ obj: SourceObject) -> Double) -> Samples {
-        let values = self.source.map { obj in
-            by(obj)
+    /**
+     TODO
+     */
+    public func create(by: (_ obj: SourceObject) -> Double) -> SamplesIO {
+        SamplesIO(
+            input: Samples(x: dates, y: self.source.map { obj in
+                by(obj)
+            }),
+            targetCount: resampleCount,
+            method: smoothingMethod
+        )
+    }
+
+    public func create(by: KeyPath<SourceObject, Double>) -> SamplesIO {
+        create { obj in
+            obj[keyPath: by]
         }
-        return Samples(yvals, values)
+    }
+
+    public func create(by: KeyPath<SourceObject, Optional<Double>>) -> SamplesIO {
+        create { obj in
+            obj[keyPath: by]!
+        }
     }
 }
 
-public struct MultiSamples {
-    public let inputs: [Samples]
-    public let outputs: [[Double]]
-
-    public init(inputs: [Samples] = []) {
-        precondition(inputs.count >= 2, "At least 2 sample vectors are required.")
-        self.inputs = []
-
-        let adsf = inputs.map(\.xVals).flatten()
-
-        let allMinDate = inputs.map(\.xVals).allMinimum()
-        let allMaxDate = inputs.map(\.xVals).allMaximum()
-        let allMinValue = inputs.map(\.yVals).allMinimum()
-        let allMaxValue = inputs.map(\.yVals).allMaximum()
-
-        var _outputs: [[Double]] = []
-        for vector in inputs {
-            let output = vector.yVals.normalizedMinMax(to: allMinValue...allMaxValue)
-            _outputs.append(output)
-        }
-
-        self.outputs = _outputs
-    }
-}
+//let ms = MultiSamples(inputs: [
+//    samplesBodyWeight.output,
+//    samplesLeanMass.output,
+//    samplesFatMass.output,
+//])
+//public struct MultiSamples {
+//    public let inputs: [Samples]
+//    public let outputs: [[Double]]
+//
+//    public init(inputs: [Samples] = []) {
+//        precondition(inputs.count >= 2, "At least 2 sample vectors are required.")
+//        self.inputs = []
+//
+//        let adsf = inputs.map(\.x).flatten()
+//
+//        let allMinDate = inputs.map(\.x).allMinimum()
+//        let allMaxDate = inputs.map(\.x).allMaximum()
+//        let allMinValue = inputs.map(\.y).allMinimum()
+//        let allMaxValue = inputs.map(\.y).allMaximum()
+//
+//        var _outputs: [[Double]] = []
+//        for vector in inputs {
+//            let output = vector.y.normalizedMinMax(to: allMinValue...allMaxValue)
+//            _outputs.append(output)
+//        }
+//
+//        self.outputs = _outputs
+//    }
+//}
 
 /// Holds the inputed raw samples and a processed representation appied resampling and smoothing on it.
-public struct SamplesInOut {
+public struct SamplesIO {
     public let input: Samples
     public let output: Samples
 
@@ -111,27 +173,23 @@ extension Sample: Comparable {
 
 public typealias Samples = [Sample]
 public extension Samples {
-    ///
-    /// # Initializers
-    ///
-
     init() {
         self = []
     }
-    
+
     init(_ samples: [Sample]) {
         self = samples
     }
-    
-    init(_ xVals: [Double], _ yVals: [Double]) {
-        precondition(xVals.count == yVals.count, "xVals [\(xVals.count)] and yVals [\(yVals.count)] must have the same count")
-        self = zip(xVals, yVals).map { Sample($0, $1) }
+
+    init(x: [Double], y: [Double]) {
+        precondition(x.count == y.count, "x [\(x.count)] and y [\(y.count)] values must have the same count")
+        self = zip(x, y).map { Sample($0, $1) }
         sort()
     }
 
-    init(_ xVals: [Date], _ yVals: [Double]) {
-        precondition(xVals.count == yVals.count, "xVals [\(xVals.count)] and yVals [\(yVals.count)] must have the same count")
-        self = zip(xVals, yVals).map { Sample($0.double, $1) }
+    init(x: [Date], y: [Double]) {
+        precondition(x.count == y.count, "x [\(x.count)] and y [\(y.count)] values must have the same count")
+        self = zip(x, y).map { Sample($0.double, $1) }
         sort()
     }
 
@@ -144,7 +202,8 @@ public extension Samples {
     /// # X values
     ///
 
-    var xVals: [Double] {
+    /// - Note: old name "xVals"
+    var x: [Double] {
         self.map(\.x)
     }
 
@@ -155,24 +214,25 @@ public extension Samples {
     ///
     /// # Y values
     ///
-    
-    var yVals: [Double] {
+
+    /// - Note: old name "yVals"
+    var y: [Double] {
         self.map(\.y)
     }
     
     ///
     /// # Samples Representation Alternatives
     ///
-    
-    var tuples: [(Double, Double)] {
+
+    /// - Note: old name "tuples"
+    var xy: [(Double, Double)] {
         return self.map { ($0.x, $0.y) }
     }
-    
-    
+
     var tuplesUsingDate: [(Date, Double)] {
         return self.map { ($0.datetime, $0.y) }
     }
-    
+
     ///
     /// # Min, Max
     ///
@@ -191,35 +251,38 @@ public extension Samples {
         return last.datetime
     }
 
-    var minValue: Double {
-        self.yVals.minimum()
+    var minY: Double {
+        self.y.minimum()
     }
 
-    var maxValue: Double {
-        self.yVals.maximum()
+    var maxY: Double {
+        self.y.maximum()
     }
 
     ///
     /// # Resample
     ///
-    
-    func resampled(targetCount: Int, method: ResampleMethod = .lerp) -> Samples {
+
+    func resampled(
+        targetCount: Int,
+        method: ResampleMethod = .lerp
+    ) -> Samples {
         switch method {
         case .lerp:
-            let rs = AccelLerpResamplerD(xVals, targetCount: targetCount)!
-            return Samples(rs.targetVals, rs.resample(yVals))
+            let rs = AccelLerpResamplerD(x, targetCount: targetCount)!
+            return Samples(x: rs.targetVals, y: rs.resample(y))
         case .lerpAccel:
-            let rs = LerpResampler(xVals, targetCount: targetCount)!
-            return Samples(rs.targetVals, rs.resample(yVals))
+            let rs = LerpResampler(x, targetCount: targetCount)!
+            return Samples(x: rs.targetVals, y: rs.resample(y))
         }
     }
-    
+
     ///
     /// # Smoothing
     ///
     
     func smoothened(_ method: SmoothingMethod) -> Samples {
-        return withY(values: method.smoothen(yVals))
+        return withY(values: method.smoothen(y))
     }
     
     ///
@@ -237,15 +300,15 @@ public extension Samples {
     ///
     
     func withY(values: [Double]) -> Samples {
-        Samples(self.xVals, values)
+        Samples(x: x, y: values)
     }
 
     func withY(_ fn: (_ samples: [(Date, Double)]) -> [Double]) -> Samples {
-        Samples(self.xVals, fn(self.tuplesUsingDate))
+        Samples(x: x, y: fn(self.tuplesUsingDate))
     }
-    
+
     func withY(_ fn: (_ oldValues: [Double]) -> [Double]) -> Samples {
-        Samples(self.xVals, fn(self.yVals))
+        Samples(x: x, y: fn(self.y))
     }
 }
 
@@ -290,6 +353,20 @@ public extension Samples {
                 stacking: stacking
             )
         }
+    }
+
+    @ChartContentBuilder
+    func chartBar() -> some ChartContent {
+        ForEach(self) { sample in
+            BarMark(
+                x: .value("", sample.datetime..<sample.datetime.added(days: 1)),
+                y: .value("", sample.y),
+                width: .ratio(0.8),
+                stacking: .standard
+            )
+        }
+//        .foregroundStyle(color)
+        .cornerRadius(0)
     }
 }
 
@@ -392,7 +469,7 @@ public extension Samples {
             ))
         )
 
-        print("Samples :: Table")
+        print("=== Samples ===")
         print(dataframe.description)
     }
 }

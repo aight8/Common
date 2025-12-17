@@ -4,53 +4,35 @@ import PackageDescription
 
 let package = Package(
     name: "Common",
-	platforms: [
+    platforms: [
         .macOS(.v15),
-        .iOS(.v18)
+        .iOS(.v18),
     ],
     products: [
         .library(
             name: "Common",
-            targets: ["Common"],
-		),
-//        .executable(
-//            name: "Benchmarks",
-//            targets: ["Benchmarks"],
-//        ),
+            targets: ["Common"]
+        ),
     ],
-	dependencies: [
-        .package(url: "https://github.com/buh/CompactSlider.git", from: "1.1.6"),
+    dependencies: [
         .package(url: "https://github.com/apple/swift-algorithms", from: "1.2.0"),
-		.package(url: "https://github.com/ordo-one/package-benchmark", from: "1.25.0"),
-//        .package(url: "https://github.com/google/swift-benchmark", from: "0.1.2"),
-	],
+        .package(url: "https://github.com/apple/swift-collections", from: "1.1.4")
+    ],
     targets: [
-		.target(
-			name: "Common",
-			dependencies: [
-                "CompactSlider",
-                .product(name: "Algorithms", package: "swift-algorithms")
+        .target(
+            name: "Common",
+            dependencies: [
+                .product(name: "Algorithms", package: "swift-algorithms"),
+                .product(name: "Collections", package: "swift-collections")
             ],
             path: "Sources"
-		),
+        ),
         .testTarget(
             name: "CommonTests",
             dependencies: [
                 "Common",
-                .product(name: "Benchmark", package: "package-benchmark")
             ],
             path: "CommonTests"
         ),
-//        .target(
-//            name: "Benchmarks",
-//            dependencies: [
-//                "Common",
-//                .product(name: "Benchmark", package: "swift-benchmark")
-//            ],
-//            path: "Benchmarks"
-//        ),
     ]
-//    swiftLanguageModes: [
-//        .v6
-//    ]
 )

@@ -35,7 +35,6 @@ public extension Array where Element: Strideable {
                 first!.distance(to: $0)
             }
         }
-        
         return self.map {
             first!.distance(to: $0)
         }

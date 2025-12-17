@@ -17,6 +17,9 @@ public extension PartialRangeFrom {
 public extension Range {
     var start: Bound { lowerBound }
     var end: Bound { upperBound }
+
+//    var from: Bound { lowerBound }
+//    var to: Bound { upperBound }
 }
 
 public extension ClosedRange {

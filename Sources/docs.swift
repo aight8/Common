@@ -1,16 +1,76 @@
 import SwiftUI
 import PhotosUI
 
-public enum swift {
-    internal func xxx() {
-    }
-    
-    @ViewBuilder
-    internal func yyy() -> some View {
-        EmptyView()
+private func xxx() {
+    // SWIFT.DataTypes.Date.spans.
+}
+
+public enum SWIFT {
+    public enum DataTypes {
+        case Character
+        case String
+        public enum Int {
+            case UInt, UInt8, UInt16, UInt32, UInt64, UInt128
+            case Int, Int8, Int16, Int32, Int64, Int128
+        }
+        case Double
+        public enum Float {
+            case Float32
+            case Float64
+        }
+        case Bool
+
+        public enum Date {
+            public enum spans {
+                case Duration /// 2x 64-bit integers
+                case TimeInterval /// double
+                case DateInterval /// two dates
+            }
+
+            public enum ranges {
+                case Range_Date_ /// Range<Date>(uncheckedBounds: (lower: Date.distantPast, upper: Date.distantFuture))
+                case ClosedRange_Date_ /// ClosedRange<Date>(uncheckedBounds: (lower: Date.distantPast, upper: Date.distantFuture))
+            }
+        }
     }
 
-    enum Presentation {
+    public enum Protocols {
+        
+    }
+
+    public enum FormatStyle {
+        public enum DateInterval {
+        }
+        public enum TimeInterval {
+        }
+        public enum Duration {
+        }
+        public enum DateRange {
+        }
+        public enum Double {
+            case number
+            case percent
+            case currency
+        }
+    }
+
+    public enum Chart {
+        public enum Mark {
+            case Area
+            case Line
+            case Point
+            case Rectangle
+            case Rule
+            case Bar
+            case Sector
+        }
+        public enum Bin {
+            case Date
+            case Number
+        }
+    }
+
+    public enum Presentation {
         case ConfirmationDialog // Previously actionSheet
         case Alert
         case Sheet
@@ -18,18 +78,18 @@ public enum swift {
         case FullScreenCover
         case Inspector
 
-        enum File {
+        public enum File {
             case FileExporter
             case FileImporter
             case FileMover
         }
 
-        enum PhotosUI {
+        public enum PhotosUI {
             case PhotosPicker
         }
     }
 
-    enum Shape {
+    public enum Shape {
         case Rectangle
         case RoundedRectangle
         case UnevenRoundedRectangle
@@ -38,7 +98,7 @@ public enum swift {
         case Ellipse
         case Path
         
-        enum Wrapper {
+        public enum Wrapper {
             /// Conforms when Content conforms to InsettableShape.
             case OffsetShape
             case RotatedShape
@@ -46,13 +106,13 @@ public enum swift {
             case TransformedShape
         }
         
-        enum Other {
+        public enum more {
             case ContainerRelativeShape
             case ButtonBorderShape
         }
     }
     
-    enum Gradient {
+    public enum Gradient {
         case Gradient
         case RadialGradient
         case MeshGradient
@@ -60,7 +120,7 @@ public enum swift {
         case LinearGradient
     }
     
-    enum Layout {
+    public enum Layout {
         /// HStack: Arranges its children in a horizontal line.
         case HStack
         /// VStack: Arranges its children in a vertical line.
@@ -109,28 +169,19 @@ public enum swift {
         case Set
         case Dictionary
         
-        enum Custom {
+        public enum Custom {
             case OrderedDictionary
             case OrderedSet
             case CircularBuffer
         }
         
-        enum Protocols {
+        public enum Protocols {
             case RandomAccessCollection
             case RangeReplaceableCollection
             case MutableCollection
         }
     }
 }
-
-struct SwiftPresentations: View {
-    var body: some View {
-        VStack {
-            
-        }
-    }
-}
-
 
 public struct SwiftFonts: View {
     public var text: String

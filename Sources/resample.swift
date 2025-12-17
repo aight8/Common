@@ -125,7 +125,7 @@ public struct LinearInterpolator<T> where T: BinaryFloatingPoint {
         self.xVals = xVals
         self.yVals = yVals
     }
-    
+
     @inlinable
     public func interpolate(_ t: T) -> T {
         if t <= xVals[0] { return yVals[0] }
